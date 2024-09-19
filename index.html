@@ -16,11 +16,12 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #2c3e50, #4ca1af); /* Trustworthy blue gradient */
+            background-color: #2c3e50; /* Fallback for older browsers */
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* Ensure the body covers the viewport height */
+            overflow: auto; /* Allow scrolling */
             position: relative;
             color: white;
         }
@@ -85,7 +86,7 @@
         .container {
             background-color: rgba(255, 255, 255, 0.1);
             max-width: 600px;
-            width: 100%;
+            width: 90%; /* Adjust width to be responsive */
             padding: 40px;
             border-radius: 20px;
             backdrop-filter: blur(10px);
@@ -285,24 +286,22 @@
                 headers: {
                     'Accept': 'application/json'
                 }
-            }).then(response => {
-                document.getElementById('loading').style.display = 'none';
-                if (response.ok) {
-                    document.getElementById('success-popup').style.display = 'block'; // Show success popup
-                } else {
-                    alert("There was an issue submitting your form. Please try again.");
-                }
-            }).catch(error => {
-                document.getElementById('loading').style.display = 'none';
-                alert("There was an issue submitting your form. Please try again.");
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('loading').style.display = 'none'; // Hide loading spinner
+                document.getElementById('success-popup').style.display = 'block'; // Show success pop-up
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('loading').style.display = 'none'; // Hide loading spinner
+                alert('Something went wrong. Please try again.');
             });
         });
 
-        // Close the pop-up
         document.getElementById('close-popup').addEventListener('click', function() {
-            document.getElementById('success-popup').style.display = 'none';
+            document.getElementById('success-popup').style.display = 'none'; // Close success pop-up
         });
     </script>
-
 </body>
 </html>
